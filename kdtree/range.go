@@ -7,7 +7,7 @@
 
 package kdtree
 
-import "github.com/pforemski/gopjf/point"
+import "github.com/pforemski/gouda/point"
 
 // search() returns all node's points that match given query range
 // world is an information on what the node and all children can contain

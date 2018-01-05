@@ -7,7 +7,7 @@
 
 package kdtree
 
-import "github.com/pforemski/gopjf/point"
+import "github.com/pforemski/gouda/point"
 
 // KDNode represents a kd-tree
 type KDNode struct {

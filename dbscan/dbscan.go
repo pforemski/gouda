@@ -7,8 +7,8 @@
 
 package dbscan
 
-import "github.com/pforemski/gopjf/point"
-import "github.com/pforemski/gopjf/kdtree"
+import "github.com/pforemski/gouda/point"
+import "github.com/pforemski/gouda/kdtree"
 
 // Search() runs DBSCAN algorithm on given points
 //
