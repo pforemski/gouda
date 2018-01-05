@@ -10,6 +10,6 @@ Currently, it includes the following modules:
  * [kdtree](./kdtree/): a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree) implementation
  * [dbscan](./dbscan/): implementation of the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN) data clustering algorithm
 
-See module directories for documentation.
+Documentation at [godoc.org](https://godoc.org/github.com/pforemski/gouda). See module directories for more information.
 
 Licensed under GNU GPL v3. Copyright (C) 2018 by Pawel Foremski, [@pforemski](https://twitter.com/pforemski).
