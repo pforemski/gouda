@@ -1,4 +1,4 @@
-# gouda/dbscan
+# gouda/point
 
 An implementation of various operations on generic n-dimensional points (and ranges of points).
 

@@ -70,7 +70,7 @@ func insert(points point.Points, depth int) *KDNode {
 	}
 
 	// find median by sampling on given axis
-	median := point.SampleMedian(points, node.axis, 250)
+	median := points.SampleMedian(node.axis, 250)
 
 	// divide
 	points_below := make(point.Points, 0, len(points)/2)

@@ -27,7 +27,7 @@ func (a sample_points) Less(i,j int) bool {
 }
 
 // SampleMedian() finds median on given axis using uniform sampling
-func SampleMedian(points Points, axis int, sample_size int) *Point {
+func (points Points) SampleMedian(axis int, sample_size int) *Point {
 	sample := sample_points{ axis: axis }
 
 	// how big sample?
@@ -50,4 +50,21 @@ func SampleMedian(points Points, axis int, sample_size int) *Point {
 
 	// take median
 	return sample.points[size / 2]
+}
+
+// Sample() returns a random sample of points of given size
+func (points Points) Sample(sample_size int) Points {
+	// sanity checks
+	if sample_size >= len(points) { return points }
+	if sample_size < 1 { return Points{} }
+
+	// take sample
+	sample := make(Points, 0, sample_size)
+	fpop := float64(len(points))
+	step := fpop / float64(sample_size)
+	for fi := 0.0; fi < fpop; fi += step {
+		sample = append(sample, points[int(fi)])
+	}
+
+	return sample
 }
