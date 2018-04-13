@@ -66,5 +66,10 @@ func (points Points) Sample(sample_size int) Points {
 		sample = append(sample, points[int(fi)])
 	}
 
+	// border case
+	if len(sample) > sample_size {
+		sample = sample[:len(sample)-1]
+	}
+
 	return sample
 }

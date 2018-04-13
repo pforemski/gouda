@@ -22,7 +22,15 @@ func TestOperations(t *testing.T) {
 
 	p2.Mul(-2)
 	t.Logf("p2 = -2 * p2 = %s\n", p2)
+	t.Logf("p2.Min() = %g\n", p2.Min())
+	t.Logf("p2.Max() = %g\n", p2.Max())
 
-	points := Points{ p1, p2 }
-	t.Logf("Mean(p1,p2) = %s\n", points.Mean())
+	points := Points{ p1, p2, New(10, 20) }
+	t.Logf("points = %s\n", points)
+	t.Logf("Min = %s\n", points.Min())
+	t.Logf("Q1 = %s\n", points.Percentile(0.25))
+	t.Logf("Mean() = %s\n", points.Mean())
+	t.Logf("Q2 = Median() = %s\n", points.Median())
+	t.Logf("Q3 = %s\n", points.Percentile(0.75))
+	t.Logf("Max = %s\n", points.Max())
 }

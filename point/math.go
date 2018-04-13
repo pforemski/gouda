@@ -8,6 +8,7 @@
 package point
 
 import "math"
+import "sort"
 
 // Euclidean() returns Euclidean distance between a and b; -1 on error
 func (a *Point) Euclidean(b *Point) float64 {
@@ -52,6 +53,34 @@ func (points Points) Mean() *Point {
 	return p
 }
 
+// Percentile() finds given percentile on each axis
+func (points Points) Percentile(percentile float64) *Point {
+	axes := points[0].Axes()
+	p := NewZero(axes)
+
+	for axis := 0; axis < axes; axis++ {
+		vals := make([]float64, len(points))
+		for i := range points {
+			vals[i] = points[i].V[axis]
+		}
+		sort.Float64s(vals)
+
+		// use precise location
+		l := float64(len(vals) - 1) // last val
+		i, f := math.Modf(l * percentile)
+		if f < 0.01 || i == l {
+			p.V[axis] = vals[int(i)]
+		} else {
+			p.V[axis] = (1.0-f)*vals[int(i)] + f*vals[int(i)+1]
+		}
+	}
+
+	return p
+}
+
+// Median() finds median using Percentile(0.5)
+func (points Points) Median() *Point { return points.Percentile(0.5); }
+
 // Stddev() computes the standard deviation of points vs. given point
 func (points Points) Stddev(mean *Point) *Point {
 	axes := points[0].Axes()
@@ -70,7 +99,7 @@ func (points Points) Stddev(mean *Point) *Point {
 	return p
 }
 
-// Min() finds minimum value on each axis
+// Min() finds the minimum value on each axis
 func (points Points) Min() *Point {
 	axes := points[0].Axes()
 
@@ -89,7 +118,16 @@ func (points Points) Min() *Point {
 	return p
 }
 
-// Max() finds maximum value on each axis
+// Min() finds the minimum value on any axis
+func (p *Point) Min() float64 {
+	min := p.V[0]
+	for i := 1; i < len(p.V); i++ {
+		if p.V[i] < min { min = p.V[i] }
+	}
+	return min
+}
+
+// Max() finds the maximum value on each axis
 func (points Points) Max() *Point {
 	axes := points[0].Axes()
 
@@ -106,4 +144,13 @@ func (points Points) Max() *Point {
 	}
 
 	return p
+}
+
+// Max() finds the maximum value on any axis
+func (p *Point) Max() float64 {
+	max := p.V[0]
+	for i := 1; i < len(p.V); i++ {
+		if p.V[i] > max { max = p.V[i] }
+	}
+	return max
 }
