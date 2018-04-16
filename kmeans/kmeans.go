@@ -9,7 +9,7 @@ package kmeans
 
 import "github.com/pforemski/gouda/point"
 
-// Search() runs k-means algorithm on given points
+// Search() runs SearchDist() using the point.Euclidean as distance function
 //
 // k is the number of clusters;
 // max_iter is maximum number of iterations;
@@ -17,6 +17,19 @@ import "github.com/pforemski/gouda/point"
 //
 // clusters is a slice of Points, where each element corresponds to a cluster
 func Search(points point.Points, k int, max_iter int, min_change float64) (clusters []point.Points) {
+	return SearchDist(points, k, max_iter, min_change, point.Euclidean)
+}
+
+// SearchDist() runs the k-means algorithm using given distance function
+//
+// k is the number of clusters;
+// max_iter is maximum number of iterations;
+// min_change is minimum change in centers (any axis) to continue;
+// dist_func is the distance function;
+//
+// clusters is a slice of Points, where each element corresponds to a cluster
+func SearchDist(points point.Points, k int, max_iter int, min_change float64,
+	dist_func func(*point.Point, *point.Point) float64) (clusters []point.Points) {
 	// prepare return value
 	clusters = make([]point.Points, k)
 	for label := 0; label < k; label++ {
@@ -28,7 +41,7 @@ func Search(points point.Points, k int, max_iter int, min_change float64) (clust
 
 	// begin with simple state
 	assignments := make([]int, len(points))
-	centers := points.Sample(k).Copy()
+	centers := points.RandomSample(k).Copy()
 
 	// prepare for future loops
 	next_centers := point.NewZeros(k, centers[0].Axes())
@@ -48,7 +61,7 @@ func Search(points point.Points, k int, max_iter int, min_change float64) (clust
 
 			// search for the closest cluster
 			for c := range centers {
-				dist := points[i].Euclidean(centers[c])
+				dist := dist_func(points[i], centers[c])
 				if min_clus < 0 || dist < min_dist {
 					min_dist = dist
 					min_clus = c
@@ -80,7 +93,7 @@ func Search(points point.Points, k int, max_iter int, min_change float64) (clust
 
 			// check how much it moved?
 			if min_change > 0 {
-				diff := centers[c].Euclidean(next_centers[c])
+				diff := dist_func(centers[c], next_centers[c])
 				if diff > max_change { max_change = diff }
 			}
 		}

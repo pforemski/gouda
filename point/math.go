@@ -10,15 +10,6 @@ package point
 import "math"
 import "sort"
 
-// Euclidean() returns Euclidean distance between a and b; -1 on error
-func (a *Point) Euclidean(b *Point) float64 {
-	dist := 0.0
-	for axis := 0; axis < len(a.V); axis++ {
-		dist += math.Pow(a.V[axis] - b.V[axis], 2.0)
-	}
-	return math.Sqrt(dist)
-}
-
 // Add() adds p2 to p1
 func (p1 *Point) Add(p2 *Point) {
 	for i := 0; i < len(p1.V) && i < len(p2.V); i++ {

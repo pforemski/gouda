@@ -8,6 +8,8 @@
 package point
 
 import "sort"
+import "math/rand"
+import "time"
 
 type sample_points struct {
 	points Points
@@ -52,7 +54,7 @@ func (points Points) SampleMedian(axis int, sample_size int) *Point {
 	return sample.points[size / 2]
 }
 
-// Sample() returns a random sample of points of given size
+// Sample() returns a uniform sample of points
 func (points Points) Sample(sample_size int) Points {
 	// sanity checks
 	if sample_size >= len(points) { return points }
@@ -62,7 +64,7 @@ func (points Points) Sample(sample_size int) Points {
 	sample := make(Points, 0, sample_size)
 	fpop := float64(len(points))
 	step := fpop / float64(sample_size)
-	for fi := 0.0; fi < fpop; fi += step {
+	for fi := step / 2.0; fi < fpop; fi += step {
 		sample = append(sample, points[int(fi)])
 	}
 
@@ -72,4 +74,23 @@ func (points Points) Sample(sample_size int) Points {
 	}
 
 	return sample
+}
+
+// RandomSample() returns a random sample of points
+func (points Points) RandomSample(sample_size int) Points {
+	// sanity checks
+	if sample_size >= len(points) { return points }
+	if sample_size < 1 { return Points{} }
+
+	// take sample
+	sample := make(Points, 0, sample_size)
+	for _,i := range rand.Perm(len(points))[:sample_size] {
+		sample = append(sample, points[i])
+	}
+
+	return sample
+}
+
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
 }
