@@ -18,9 +18,6 @@ type Point struct {
 	D interface{}
 }
 
-// Points is a collection of memory pointers to points
-type Points []*Point
-
 // New() creates a new point
 func New(vals ...float64) *Point {
 	ret := &Point{}
@@ -43,8 +40,13 @@ func NewZero(axes int) *Point {
 	return ret
 }
 
+// Zero() zero-es the given point
+func (p *Point) Zero() {
+	for i := range p.V { p.V[i] = 0 }
+}
+
 // Copy() creates a new point by copying another one
-func Copy(p *Point) *Point {
+func (p *Point) Copy() *Point {
 	ret := &Point{}
 	ret.V = make([]float64, len(p.V))
 	copy(ret.V, p.V)
@@ -60,4 +62,34 @@ func (p *Point) String() (ret string) {
 	ret = fmt.Sprintf("%.4g", p.V)
 	if p.D != nil { ret += fmt.Sprintf("->(%T %v)", p.D, p.D) }
 	return
+}
+
+/********************************************************/
+
+// Points is a collection of memory pointers to points
+type Points []*Point
+
+// NewZeros() creates new n zero Points with given number of axes
+func NewZeros(n, axes int) Points {
+	ret := make(Points, n)
+	for i := range ret {
+		ret[i] = NewZero(axes)
+	}
+	return ret
+}
+
+// Zeros() zero-es given slice of points
+func (points Points) Zeros() {
+	for i := range points {
+		points[i].Zero()
+	}
+}
+
+// Copy() creates new slice of points by copying another one
+func (points Points) Copy() Points {
+	ret := make(Points, len(points))
+	for i := range points {
+		ret[i] = points[i].Copy()
+	}
+	return ret
 }

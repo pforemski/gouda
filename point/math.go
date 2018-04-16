@@ -12,15 +12,13 @@ import "sort"
 
 // Euclidean() returns Euclidean distance between a and b; -1 on error
 func (a *Point) Euclidean(b *Point) float64 {
-	if len(a.V) != len(b.V) { return -1 }
-
 	dist := 0.0
 	for axis := 0; axis < len(a.V); axis++ {
 		dist += math.Pow(a.V[axis] - b.V[axis], 2.0)
 	}
-
 	return math.Sqrt(dist)
 }
+
 // Add() adds p2 to p1
 func (p1 *Point) Add(p2 *Point) {
 	for i := 0; i < len(p1.V) && i < len(p2.V); i++ {
@@ -37,6 +35,8 @@ func (p *Point) Mul(fact float64) {
 
 // Mean() computes the arithmetic mean along each axis in points
 func (points Points) Mean() *Point {
+	if len(points) == 0 { return NewZero(0) }
+
 	axes := points[0].Axes()
 	p := NewZero(axes)
 	for i := range points {
@@ -55,6 +55,8 @@ func (points Points) Mean() *Point {
 
 // Percentile() finds given percentile on each axis
 func (points Points) Percentile(percentile float64) *Point {
+	if len(points) == 0 { return NewZero(0) }
+
 	axes := points[0].Axes()
 	p := NewZero(axes)
 
@@ -83,6 +85,8 @@ func (points Points) Median() *Point { return points.Percentile(0.5); }
 
 // Stddev() computes the standard deviation of points vs. given point
 func (points Points) Stddev(mean *Point) *Point {
+	if len(points) == 0 { return NewZero(0) }
+
 	axes := points[0].Axes()
 	p := NewZero(axes)
 	for i := range points {
@@ -99,16 +103,16 @@ func (points Points) Stddev(mean *Point) *Point {
 	return p
 }
 
-// Min() finds the minimum value on each axis
+// Min() finds the minimum value on each axis; it is not "the minimal point" of all points
 func (points Points) Min() *Point {
-	axes := points[0].Axes()
+	if len(points) == 0 { return NewZero(0) }
 
 	// use first point as start
-	p := Copy(points[0])
+	p := points[0].Copy()
 	p.D = nil
 
-	for i := range points {
-		for axis := 0; axis < axes; axis++ {
+	for i := 1; i < len(points); i++ {
+		for axis := 0; axis < len(p.V); axis++ {
 			if points[i].V[axis] < p.V[axis] {
 				p.V[axis] = points[i].V[axis]
 			}
@@ -127,16 +131,16 @@ func (p *Point) Min() float64 {
 	return min
 }
 
-// Max() finds the maximum value on each axis
+// Max() finds the maximum value on each axis; it is not "the maximum point" of all points
 func (points Points) Max() *Point {
-	axes := points[0].Axes()
+	if len(points) == 0 { return NewZero(0) }
 
 	// use first point as start
-	p := Copy(points[0])
+	p := points[0].Copy()
 	p.D = nil
 
-	for i := range points {
-		for axis := 0; axis < axes; axis++ {
+	for i := 1; i < len(points); i++ {
+		for axis := 0; axis < len(p.V); axis++ {
 			if points[i].V[axis] > p.V[axis] {
 				p.V[axis] = points[i].V[axis]
 			}

@@ -25,50 +25,73 @@ func Search(points point.Points, k int, max_iter int, min_change float64) (clust
 
 	// sanity checks
 	if len(points) < 1 { return }
-	axes := len(points[0].V)
 
 	// begin with simple state
 	assignments := make([]int, len(points))
-	centers := points.Sample(k)
+	centers := points.Sample(k).Copy()
+
+	// prepare for future loops
+	next_centers := point.NewZeros(k, centers[0].Axes())
+	next_counter := make([]float64, k)
 
 	// rock and roll
-	for iteration := 0; iteration < max_iter; iteration++ {
-		// re-assign to closest clusters
+	for iteration := 0; iteration < max_iter || max_iter == 0; iteration++ {
+		// clear state
+		changes := 0
+		next_centers.Zeros()
+		for i := range next_counter { next_counter[i] = 0 }
+
+		// assign each point to closest cluster
 		for i := range points {
 			min_dist := -1.0
+			min_clus := -1
+
+			// search for the closest cluster
 			for c := range centers {
 				dist := points[i].Euclidean(centers[c])
-				if min_dist < 0 || dist < min_dist {
-					assignments[i] = c
+				if min_clus < 0 || dist < min_dist {
 					min_dist = dist
+					min_clus = c
 				}
 			}
+
+			// assignment changed?
+			if min_clus != assignments[i] {
+				changes += 1
+			}
+
+			// assign
+			assignments[i] = min_clus
+
+			// track upcoming new cluster centers
+			next_centers[min_clus].Add(points[i])
+			next_counter[min_clus] += 1
 		}
 
-		// re-compute centers, check difference vs. old centers
-		new_centers := make(point.Points, k)
-		new_counter := make([]float64, k)
-		max_change := 0.0
-		for c := range new_centers {
-			new_centers[c] = point.NewZero(axes)
-		}
-		for i := range assignments {
-			c := assignments[i]
-			new_centers[c].Add(points[i])
-			new_counter[c] += 1
-		}
-		for c := range new_centers {
-			new_centers[c].Mul(1.0/new_counter[c])
-			diff := centers[c].Euclidean(new_centers[c])
-			if diff > max_change { max_change = diff }
-		}
-
-		// how much did they change?
-		if max_change < min_change {
+		// no more changes? quit
+		if changes == 0 {
 			break
 		}
 
-		centers = new_centers
+		// re-compute centers
+		max_change := 0.0
+		for c := range centers {
+			next_centers[c].Mul(1.0/next_counter[c])
+
+			// check how much it moved?
+			if min_change > 0 {
+				diff := centers[c].Euclidean(next_centers[c])
+				if diff > max_change { max_change = diff }
+			}
+		}
+
+		// the change was too small?
+		if min_change > 0 && max_change < min_change {
+			break
+		}
+
+		// exchange the centers
+		centers, next_centers = next_centers, centers
 	}
 
 	// re-write the results
