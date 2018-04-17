@@ -1,21 +1,39 @@
-# gouda
-
-Gouda: Golang Utilities for Data Analysis
+# Gouda: Golang Utilities for Data Analysis
 
 A collection of Golang libraries implementing various techniques for data analysis, including machine learning.
 
+To install:
+```
+go get github.com/pforemski/gouda
+```
+
+## Features
+
 Currently, it includes the following modules:
 
- * [point](./point/): generic n-dimensional points & operations
+* [point](./point/): for operations on generic, n-dimensional points
+ 
+* [kdtree](./kdtree/): a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree) implementation
+ 
+* [kmeans](./kmeans/): an implementation of the
+  [k-means](https://en.wikipedia.org/wiki/K-means_clustering) data clustering algorithm
+   
+* [dbscan](./dbscan/): an implementation of the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)
+  data clustering algorithm using kd-tree
 
- * [kdtree](./kdtree/): a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree) implementation
+## Documentation
 
- * [kmeans](./kmeans/): a simple implementation of the
-   [k-means](https://en.wikipedia.org/wiki/K-means_clustering) data clustering algorithm
+**API documentation**:
+* See [godoc.org](https://godoc.org/github.com/pforemski/gouda) for the root of API documentation. Navigate to module directories for detailed information.
 
- * [dbscan](./dbscan/): an implementation of the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)
-   data clustering algorithm using kd-tree
+More documentation & some examples available in the README files of each module:
+* [point](./point/README.md)
+* [kdtree](./kdtree/README.md)
+* [kmeans](./kmeans/README.md)
+* [dbscan](./dbscan/README.md)
 
-Documentation at [godoc.org](https://godoc.org/github.com/pforemski/gouda). See module directories for more information.
+## Author
 
-Licensed under GNU GPL v3. Copyright (C) 2018 by Pawel Foremski, [@pforemski](https://twitter.com/pforemski).
+Copyright (C) 2018 by Pawel Foremski, [@pforemski](https://twitter.com/pforemski).
+
+Licensed under GNU GPL v3.
