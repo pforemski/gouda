@@ -21,14 +21,22 @@ type Point struct {
 // New() creates a new point
 func New(vals ...float64) *Point {
 	ret := &Point{}
-	ret.V = vals
+	if vals != nil {
+		ret.V = vals
+	} else {
+		ret.V = make([]float64, 0)
+	}
 	return ret
 }
 
 // NewD() creates a new point with data D
 func NewD(D interface{}, vals ...float64) *Point {
 	ret := &Point{}
-	ret.V = vals
+	if vals != nil {
+		ret.V = vals
+	} else {
+		ret.V = make([]float64, 0)
+	}
 	ret.D = D
 	return ret
 }
@@ -40,11 +48,6 @@ func NewZero(axes int) *Point {
 	return ret
 }
 
-// Zero() zero-es the given point
-func (p *Point) Zero() {
-	for i := range p.V { p.V[i] = 0 }
-}
-
 // Copy() creates a new point by copying another one
 func (p *Point) Copy() *Point {
 	ret := &Point{}
@@ -54,7 +57,7 @@ func (p *Point) Copy() *Point {
 	return ret
 }
 
-// Axes() returns number of axes in p
+// Axes() returns the number of axes in p
 func (p *Point) Axes() int { return len(p.V) }
 
 // String() converts a Point to a string object

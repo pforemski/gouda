@@ -26,11 +26,17 @@ func TestOperations(t *testing.T) {
 	t.Logf("p2.Max() = %g\n", p2.Max())
 
 	points := Points{ p1, p2, New(10, 20) }
+	mean := points.Mean()
 	t.Logf("points = %s\n", points)
 	t.Logf("Min = %s\n", points.Min())
 	t.Logf("Q1 = %s\n", points.Percentile(0.25))
-	t.Logf("Mean() = %s\n", points.Mean())
+	t.Logf("Mean() = %s\n", mean)
 	t.Logf("Q2 = Median() = %s\n", points.Median())
 	t.Logf("Q3 = %s\n", points.Percentile(0.75))
-	t.Logf("Max = %s\n", points.Max())
+	t.Logf("Max = %s\n\n", points.Max())
+
+	t.Logf("Errors() = %s\n", points.Errors(mean))
+	t.Logf("SSE = %.5g\n", points.Errors(mean).Sum())
+	t.Logf("Variance() = %s\n", points.Variance(mean))
+	t.Logf("Stddev() = %s\n", points.Stddev(mean))
 }
