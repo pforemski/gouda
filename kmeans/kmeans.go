@@ -89,7 +89,9 @@ func SearchDist(points point.Points, k int, max_iter int, min_change float64,
 		// re-compute centers
 		max_change := 0.0
 		for c := range centers {
-			next_centers[c].Mul(1.0/next_counter[c])
+			if next_counter[c] > 0 {
+				next_centers[c].Mul(1.0/next_counter[c])
+			}
 
 			// check how much it moved?
 			if min_change > 0 {
