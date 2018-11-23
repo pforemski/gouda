@@ -23,7 +23,7 @@ Currently, it includes the following modules:
   * [dbscan](./dbscan/): the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)
   data clustering algorithm using kd-tree
 
-* [interpolation](./interpolation/): numerical [interpolation](https://en.wikipedia.org/wiki/Interpolation)
+* [interpolate](./interpolate/): numerical [interpolation](https://en.wikipedia.org/wiki/Interpolation)
   methods (wip, currently just the Lagrange polynomial)
 
 ## Documentation
