@@ -40,7 +40,7 @@ func TestLagrange_Interpolate(t *testing.T) {
 			t.Fatalf("%d: len(args)!=len(want)", ti)
 		}
 
-		lg, err := New(tt.points)
+		lg, err := NewLagrange(tt.points)
 		if err != nil {
 			t.Fatalf("%d: New(): %s", ti, err)
 		}

@@ -7,6 +7,8 @@ To install:
 go get github.com/pforemski/gouda
 ```
 
+This is work in progress. Expect breaking changes. [Embrace for impact](https://en.wikipedia.org/wiki/Sully_(film)).
+
 ## Features
 
 Currently, it includes the following modules:
@@ -14,12 +16,15 @@ Currently, it includes the following modules:
 * [point](./point/): for operations on generic, n-dimensional points
  
 * [kdtree](./kdtree/): a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree) implementation
- 
-* [kmeans](./kmeans/): an implementation of the
+
+* data clustering:
+  * [kmeans](./kmeans/): the
   [k-means](https://en.wikipedia.org/wiki/K-means_clustering) data clustering algorithm
-   
-* [dbscan](./dbscan/): an implementation of the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)
+  * [dbscan](./dbscan/): the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)
   data clustering algorithm using kd-tree
+
+* [interpolation](./interpolation/): numerical [interpolation](https://en.wikipedia.org/wiki/Interpolation)
+  methods (wip, currently just the Lagrange polynomial)
 
 ## Documentation
 

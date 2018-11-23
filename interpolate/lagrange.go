@@ -21,25 +21,32 @@ type Lagrange struct {
 	wd          []float64
 }
 
-// New() returns new Lagrange interpolation for given set of 2D points
-func New(points point.Points) (*Lagrange, error) {
+// NewLagrange() returns new Lagrange interpolation for given set of 2D points
+func NewLagrange(points point.Points) (*Lagrange, error) {
 	lg := &Lagrange{}
 	lg.Points = points
 
+	// ok?
+	if len(points) < 2 {
+		return nil, fmt.Errorf("need at least 2 points")
+	}
+
 	// check points, pre-compute parts of aux. polynomials
 	lg.wd = make([]float64, len(points))
+	var lastx float64
 	for i := range lg.Points {
 		if len(lg.Points[i].V) != 2 {
 			return nil, fmt.Errorf("point #%d (%s): must be 2D", i, lg.Points[i])
 		}
 
+		if i > 0 && lg.Points[i].V[0] <= lastx {
+			return nil, fmt.Errorf("point #%d (%s): x must be greater than previous point", i, lg.Points[i])
+		}
+		lastx = lg.Points[i].V[0]
+
 		lg.wd[i] = 1.0
 		for j := range lg.Points {
 			if i != j { lg.wd[i] *= lg.Points[i].V[0] - lg.Points[j].V[0] }
-		}
-
-		if lg.wd[i] == 0 {
-			return nil, fmt.Errorf("point #%d (%s): repetition (wd=0)", i, lg.Points[i])
 		}
 	}
 
@@ -55,7 +62,7 @@ func (lg *Lagrange) w(i int, x float64) float64 {
 	return v / lg.wd[i]
 }
 
-// Interpolate() predicts function value in point x
+// Interpolate() predicts function value at point x
 func (lg *Lagrange) Interpolate(x float64) float64 {
 	v := 0.0
 	for i := range lg.Points {
